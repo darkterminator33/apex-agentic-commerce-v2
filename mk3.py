@@ -122,7 +122,7 @@ with tab_store:
             """
 
             try:
-                response = client.models.generate_content(model="gemini-3.6-flash", contents=[system_instruction, user_query])
+                response = client.models.generate_content(model="gemini-3.5-flash-lite", contents=[system_instruction, user_query])
                 data = json.loads(response.text.replace("```json", "").replace("```", "").strip())
 
                 reply = data.get("reply", "How can I help?")
