@@ -27,6 +27,14 @@ The first version's `propose → confirm` pattern proved out the *shape* of agen
 
 `selftest.py` exercises all five of these against a stubbed Razorpay client (no live keys needed) — see below.
 
+## 🎥 Programmatic Visuals (Powered by Manim)
+
+To illustrate the complex Agentic Commerce architecture and establish the project's visual identity, this repository includes programmatic, code-driven animations built with the Python [Manim](https://www.manim.community/) engine. 
+
+You can find the source code for these animations in the repository:
+* **Title Sequence**: A custom Red Bull Racing-themed (Deep Matte Navy & Racing Red) dynamic entry animation. 
+* **Architecture Diagram**: A dynamic visual mapping of the "One Enforcement Engine, Two Front Doors" architecture. It traces the mandate flow, bounded constraints, and the strict public/private key boundaries between the Wallet Authority and the Core Engine.
+
 ## 🚀 How It Works (Two Front Doors)
 
 **1. The Human Buyer (Streamlit)**
@@ -48,9 +56,11 @@ The first version's `propose → confirm` pattern proved out the *shape* of agen
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+
 ```
 
 **2. Set Environment Variables (`.env`)**
+
 ```text
 GEMINI_API_KEY=your_key
 RAZORPAY_KEY_ID=your_id
@@ -61,24 +71,31 @@ RAZORPAY_KEY_SECRET=your_secret
 # default AGENT_DEMO_KEY is used.
 AGENT_DEMO_KEY=sk_test_demo_key_12345
 MANDATE_SECRET=change_me_in_production
+
 ```
 
 **3. Start the Apps (in separate terminals)**
+
 ```bash
 # Front Door 1: Human UI
 streamlit run mk3.py
 
 # Front Door 2: Agent API
 uvicorn agent_api:app --reload --port 8000
+
 ```
 
 **4. Run the hardening self-tests (no live keys needed — Razorpay is stubbed)**
+
 ```bash
 python3 selftest.py
+
 ```
-Expected: 6/6 `PASS` lines, covering mandate cap enforcement, mandate-required checkout, no double-charge under concurrency, graceful rollback on a simulated Razorpay outage, proposal TTL expiry, and rate limiting.
+
+Expected: `6/6 PASS lines`, covering mandate cap enforcement, mandate-required checkout, no double-charge under concurrency, graceful rollback on a simulated Razorpay outage, proposal TTL expiry, and rate limiting.
 
 **5. Example agent flow (curl)**
+
 ```bash
 # 1. Get a spending mandate (stand-in for a user-signed authorization)
 curl -X POST localhost:8000/mandate/issue \
@@ -94,6 +111,7 @@ curl -X POST localhost:8000/checkout/propose \
 curl -X POST localhost:8000/checkout/confirm \
   -H "X-Agent-Key: sk_test_demo_key_12345" -H "Content-Type: application/json" \
   -d '{"proposal_id": "prop_xxxxxxxx", "agent_id": "agent_demo_buyer"}'
+
 ```
 
-*Note: In this prototype, the Streamlit and FastAPI servers run in separate processes. In a production environment, `core.py`'s in-memory dictionaries (catalog, proposals, mandates, audit log) would be replaced by a shared SQLite/Postgres database, and mandate signatures would be verified against the user's own public key rather than a merchant-held secret.*
+> **Note:** In this prototype, the Streamlit and FastAPI servers run in separate processes. In a production environment, `core.py`'s in-memory dictionaries (catalog, proposals, mandates, audit log) would be replaced by a shared SQLite/Postgres database, and mandate signatures would be verified against the user's own public key rather than a merchant-held secret.
