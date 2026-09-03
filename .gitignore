@@ -1,6 +1,18 @@
+# Security & Credentials
+# The wallet's private key must never be committed -- it's the whole point
+# that only the wallet holds it. The public key is fine to commit/share.
+wallet_private_key.pem
 .env
+mandate.json
+
+# Python & Environment
 __pycache__/
 *.pyc
-.venv/
 venv/
-.streamlit/secrets.toml
+.venv/
+
+# Manim Render Cache & Output
+media/
+
+# Auto-downloaded emoji assets
+emoji_*.png
